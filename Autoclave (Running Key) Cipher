@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+
+void runningKeyEncrypt(std::string &text, const std::string &key) {
+    int keyIndex = 0;
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            int shift = isalpha(key[keyIndex]) ? toupper(key[keyIndex]) - 'A' : 0;
+            text[i] = (text[i] - base + shift) % 26 + base;
+            keyIndex = (keyIndex + 1) % key.length(); // Repeat key if shorter than text
+        }
+    }
+}
+
+void runningKeyDecrypt(std::string &text, const std::string &key) {
+    int keyIndex = 0;
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            int shift = isalpha(key[keyIndex]) ? toupper(key[keyIndex]) - 'A' : 0;
+            text[i] = (text[i] - base - shift + 26) % 26 + base;
+            keyIndex = (keyIndex + 1) % key.length(); // Repeat key if shorter than text
+        }
+    }
+}
+
+int main() {
+    std::string text, key;
+
+    std::cout << "Enter text: ";
+    std::getline(std::cin, text);
+
+    std::cout << "Enter key: ";
+    std::getline(std::cin, key);
+
+    runningKeyEncrypt(text, key);
+    std::cout << "Encrypted text: " << text << std::endl;
+
+    runningKeyDecrypt(text, key);
+    std::cout << "Decrypted text: " << text << std::endl;
+
+    return 0;
+}
