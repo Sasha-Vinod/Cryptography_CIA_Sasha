@@ -1,0 +1,82 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void myszkowskiEncrypt(string& text, string& key, string& encrypted) {
+    vector<int> keyIndices(key.length());
+    for (int i = 0; i < key.length(); i++) {
+        keyIndices[i] = key[i] - 'A';
+    }
+
+    vector<char> sortedKey(key.begin(), key.end());
+    sort(sortedKey.begin(), sortedKey.end());
+
+    vector<vector<char>> grid(key.length(), vector<char>(text.length() / key.length() + 1, ' '));
+    int index = 0;
+    for (int i = 0; i < key.length(); i++) {
+        for (int j = 0; j < text.length() / key.length(); j++) {
+            if (index < text.length()) {
+                grid[i][j] = text[index++];
+            }
+        }
+    }
+
+    for (char c : sortedKey) {
+        for (int i = 0; i < key.length(); i++) {
+            if (key[i] == c) {
+                for (int j = 0; j < text.length() / key.length(); j++) {
+                    encrypted += grid[i][j];
+                }
+            }
+        }
+    }
+}
+
+void myszkowskiDecrypt(string& encrypted, string& key, string& decrypted) {
+    vector<int> keyIndices(key.length());
+    for (int i = 0; i < key.length(); i++) {
+        keyIndices[i] = key[i] - 'A';
+    }
+
+    vector<char> sortedKey(key.begin(), key.end());
+    sort(sortedKey.begin(), sortedKey.end());
+
+    vector<vector<char>> grid(key.length(), vector<char>(encrypted.length() / key.length() + 1, ' '));
+    int index = 0;
+    for (char c : sortedKey) {
+        for (int i = 0; i < key.length(); i++) {
+            if (key[i] == c) {
+                for (int j = 0; j < encrypted.length() / key.length(); j++) {
+                    grid[i][j] = encrypted[index++];
+                }
+            }
+        }
+    }
+
+    for (int i = 0; i < encrypted.length() / key.length(); i++) {
+        for (int j = 0; j < key.length(); j++) {
+            decrypted += grid[j][i];
+        }
+    }
+}
+
+int main() {
+    string text, key, encrypted, decrypted;
+
+    cout << "Enter plaintext: ";
+    getline(cin, text);
+
+    cout << "Enter keyword: ";
+    cin >> key;
+
+    myszkowskiEncrypt(text, key, encrypted);
+    cout << "Encrypted text: " << encrypted << endl;
+
+    myszkowskiDecrypt(encrypted, key, decrypted);
+    cout << "Decrypted text: " << decrypted << endl;
+
+    return 0;
+}
