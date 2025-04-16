@@ -1,0 +1,44 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+
+void caesarEncrypt(std::string &text, int key) {
+    for (int i = 0; i < text.length(); i++) {
+        if (isupper(text[i])) {
+            text[i] = (text[i] - 'A' + key) % 26 + 'A';
+        }
+        else if (islower(text[i])) {
+            text[i] = (text[i] - 'a' + key) % 26 + 'a';
+        }
+    }
+}
+
+void caesarDecrypt(std::string &text, int key) {
+    for (int i = 0; i < text.length(); i++) {
+        if (isupper(text[i])) {
+            text[i] = (text[i] - 'A' - key + 26) % 26 + 'A';
+        }
+        else if (islower(text[i])) {
+            text[i] = (text[i] - 'a' - key + 26) % 26 + 'a';
+        }
+    }
+}
+
+int main() {
+    std::string text;
+    int key;
+
+    std::cout << "Enter text: ";
+    std::getline(std::cin, text);
+
+    std::cout << "Enter key (shift value): ";
+    std::cin >> key;
+
+    caesarEncrypt(text, key);
+    std::cout << "Encrypted text: " << text << std::endl;
+
+    caesarDecrypt(text, key);
+    std::cout << "Decrypted text: " << text << std::endl;
+
+    return 0;
+}
