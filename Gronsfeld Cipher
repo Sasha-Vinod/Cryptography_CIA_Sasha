@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+
+void gronsfeldEncrypt(std::string &text, const std::string &key) {
+    int keyIndex = 0;
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            int keyDigit = key[keyIndex] - '0';  // Convert the character key to an integer
+            text[i] = (text[i] - base + keyDigit) % 26 + base;
+            keyIndex = (keyIndex + 1) % key.length();
+        }
+    }
+}
+
+void gronsfeldDecrypt(std::string &text, const std::string &key) {
+    int keyIndex = 0;
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            int keyDigit = key[keyIndex] - '0';  // Convert the character key to an integer
+            text[i] = (text[i] - base - keyDigit + 26) % 26 + base;
+            keyIndex = (keyIndex + 1) % key.length();
+        }
+    }
+}
+
+int main() {
+    std::string text, key;
+
+    std::cout << "Enter text: ";
+    std::getline(std::cin, text);
+
+    std::cout << "Enter key (a numeric string): ";
+    std::getline(std::cin, key);
+
+    gronsfeldEncrypt(text, key);
+    std::cout << "Encrypted text: " << text << std::endl;
+
+    gronsfeldDecrypt(text, key);
+    std::cout << "Decrypted text: " << text << std::endl;
+
+    return 0;
+}
