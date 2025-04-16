@@ -1,0 +1,38 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+
+void augustCipher(std::string &text) {
+    int key = 8;
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            text[i] = (text[i] - base + key) % 26 + base;
+        }
+    }
+}
+
+void decryptAugust(std::string &text) {
+    int key = 8;
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            text[i] = (text[i] - base - key + 26) % 26 + base;
+        }
+    }
+}
+
+int main() {
+    std::string text;
+
+    std::cout << "Enter text: ";
+    std::getline(std::cin, text);
+
+    augustCipher(text);
+    std::cout << "Encrypted text: " << text << std::endl;
+
+    decryptAugust(text);
+    std::cout << "Decrypted text: " << text << std::endl;
+
+    return 0;
+}
