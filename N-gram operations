@@ -1,0 +1,63 @@
+#include <iostream>
+#include <vector>
+#include <sstream>
+#include <string>
+
+using namespace std;
+
+vector<string> generateCharNgrams(const string &text, int n) {
+    vector<string> ngrams;
+    if (n <= 0 || text.length() < n) return ngrams;
+    
+    for (size_t i = 0; i <= text.length() - n; ++i) {
+        ngrams.push_back(text.substr(i, n));
+    }
+    return ngrams;
+}
+
+vector<string> generateWordNgrams(const string &text, int n) {
+    vector<string> ngrams;
+    stringstream ss(text);
+    string word;
+    vector<string> words;
+    
+    while (ss >> word) {
+        words.push_back(word);
+    }
+
+    if (n <= 0 || words.size() < n) return ngrams;
+    
+    for (size_t i = 0; i <= words.size() - n; ++i) {
+        string ngram = "";
+        for (size_t j = 0; j < n; ++j) {
+            ngram += words[i + j] + " ";
+        }
+        ngrams.push_back(ngram.substr(0, ngram.length() - 1));  // remove trailing space
+    }
+    return ngrams;
+}
+
+int main() {
+    string text;
+    int n;
+
+    cout << "Enter text: ";
+    getline(cin, text);
+
+    cout << "Enter N (for N-grams): ";
+    cin >> n;
+
+    vector<string> charNgrams = generateCharNgrams(text, n);
+    cout << "\nCharacter N-grams: \n";
+    for (const auto &ngram : charNgrams) {
+        cout << ngram << endl;
+    }
+
+    vector<string> wordNgrams = generateWordNgrams(text, n);
+    cout << "\nWord N-grams: \n";
+    for (const auto &ngram : wordNgrams) {
+        cout << ngram << endl;
+    }
+
+    return 0;
+}
