@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+
+void beaufortEncrypt(std::string &text, const std::string &key) {
+    int keyIndex = 0;
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            char keyChar = isupper(key[keyIndex]) ? key[keyIndex] : toupper(key[keyIndex]);
+            text[i] = (keyChar - text[i] + 26) % 26 + base;
+            keyIndex = (keyIndex + 1) % key.length();
+        }
+    }
+}
+
+void beaufortDecrypt(std::string &text, const std::string &key) {
+    int keyIndex = 0;
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            char keyChar = isupper(key[keyIndex]) ? key[keyIndex] : toupper(key[keyIndex]);
+            text[i] = (keyChar - text[i] + 26) % 26 + base;
+            keyIndex = (keyIndex + 1) % key.length();
+        }
+    }
+}
+
+int main() {
+    std::string text, key;
+
+    std::cout << "Enter text: ";
+    std::getline(std::cin, text);
+
+    std::cout << "Enter key: ";
+    std::getline(std::cin, key);
+
+    beaufortEncrypt(text, key);
+    std::cout << "Encrypted text: " << text << std::endl;
+
+    beaufortDecrypt(text, key);
+    std::cout << "Decrypted text: " << text << std::endl;
+
+    return 0;
+}
