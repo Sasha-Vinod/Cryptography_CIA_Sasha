@@ -1,0 +1,54 @@
+#include <iostream>
+#include <string>
+#include <cctype>
+
+int modInverse(int a, int m) {
+    for (int x = 1; x < m; x++) {
+        if ((a * x) % m == 1) {
+            return x;
+        }
+    }
+    return -1;
+}
+
+void affineEncrypt(std::string &text, int a, int b) {
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            text[i] = (a * (text[i] - base) + b) % 26 + base;
+        }
+    }
+}
+
+void affineDecrypt(std::string &text, int a, int b) {
+    int a_inv = modInverse(a, 26);  // Find modular inverse of a
+    if (a_inv == -1) {
+        std::cout << "Modular inverse does not exist. Try a different 'a'.\n";
+        return;
+    }
+    for (int i = 0; i < text.length(); i++) {
+        if (isalpha(text[i])) {
+            char base = isupper(text[i]) ? 'A' : 'a';
+            text[i] = (a_inv * (text[i] - base - b + 26)) % 26 + base;
+        }
+    }
+}
+
+int main() {
+    std::string text;
+    int a, b;
+
+    std::cout << "Enter text: ";
+    std::getline(std::cin, text);
+
+    std::cout << "Enter 'a' and 'b' values for the Affine Cipher (a, b): ";
+    std::cin >> a >> b;
+
+    affineEncrypt(text, a, b);
+    std::cout << "Encrypted text: " << text << std::endl;
+
+    affineDecrypt(text, a, b);
+    std::cout << "Decrypted text: " << text << std::endl;
+
+    return 0;
+}
